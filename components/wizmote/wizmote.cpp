@@ -9,12 +9,16 @@ namespace wizmote {
 void WizMoteListener::on_esp_now_message(esp_now::ESPNowPacket packet) {
   
   static const char *const TAG = "wizmote";
-  ESP_LOGD(TAG, "Debug message by bingo");
+  ESP_LOGD(TAG, "Button pressed");
   
   WizMotePacket wizmote = WizMotePacket::build(packet);
-  if (wizmote.sequence <= this->last_sequence_)
+  if (wizmote.sequence <= this->last_sequence_) {
+    ESP_LOGD(TAG, "Sequence rmpty");
     return;
-
+  }
+  
+  ESP_LOGD(TAG, "Sequence ongoing...");
+  
   this->last_sequence_ = wizmote.sequence;
   this->on_button_->trigger(wizmote);
 }
